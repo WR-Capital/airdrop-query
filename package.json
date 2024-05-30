@@ -1,0 +1,21 @@
+{
+  "name": "airdrop-query",
+  "version": "1.0.0",
+  "description": "空投查询脚本集合",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jupiter": "node ./src/jupiter.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@youpaichris/logger": "^5.0.0",
+    "axios-https-proxy-fix": "^0.17.1",
+    "csv-parser": "^3.0.0",
+    "csv-stringify": "^6.5.0",
+    "fs": "^0.0.1-security"
+  }
+}

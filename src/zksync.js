@@ -7,11 +7,13 @@ import { fileURLToPath } from 'url';
 import { parse } from 'path';
 import Logger from "@youpaichris/logger";
 import { randomInt } from 'crypto';
+import { csvToArray, appendToCsv, sleep } from './utils.js';
 const logger = new Logger();
 
 const __filename = fileURLToPath(import.meta.url);
 const parsedPath = parse(__filename);
 const filename = parsedPath.name;
+const outputPath = `${OUTPUTPATH}/${filename}QueryData.csv`;
 const headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
     'X-Api-Key': '46001d8f026d4a5bb85b33530120cd38'
@@ -39,39 +41,36 @@ async function queryzkSyncAirdrop(walletAddress) {
     let airDropDatas = [];
     const dataProcessingPromises = [];
 
-    fs.createReadStream(ZKWALLETPATH)
-        .pipe(csv())
-        .on('data', (row) => {
-            dataProcessingPromises.push((async () => {
-                const walletAddress = row['Address'];
-                const walletName = row['Wallet'];
-                let retry = 0;
-                let res = null;
-                let airDropData = {};
-                while (retry < MAXRETRY) {
-                    await new Promise(resolve => setTimeout(resolve, randomInt(1000, 5000)));
-                    res = await queryzkSyncAirdrop(walletAddress);
-                    if (res.state === 'sucess') {
-                        airDropData = { walletName, walletAddress, amount: res.amount };
-                        break;
-                    }
-                    retry++;
-                }
-                if (retry === MAXRETRY) {
-                    airDropData = { walletName, walletAddress, amount: 'error' };
-                }
-                logger.success(airDropData);
-                airDropDatas.push(airDropData);
-            })());
-        })
-        .on('end', async () => {
-            await Promise.all(dataProcessingPromises);
-            csvStringify.stringify(airDropDatas, { header: true }, (err, output) => {
-                if (err) throw err;
-                fs.writeFile(`${OUTPUTPATH}/${filename}QueryData.csv`, output, (err) => {
-                    if (err) throw err;
-                    logger.info(`查询完毕，结果保存在: data/output/${filename}QueryData.csv`);
-                });
-            });
-        });
+
+    const wallet = await csvToArray(ZKWALLETPATH)
+    console.log(wallet)
+
+    for (const row of wallet) {
+
+        const walletAddress = row['Address'];
+        const walletName = row['Wallet'];
+        let retry = 0;
+        let res = null;
+        let airDropData = {};
+        while (retry < MAXRETRY) {
+            await sleep(randomInt(1, 4));
+            res = await queryzkSyncAirdrop(walletAddress);
+            if (res.state === 'sucess') {
+                airDropData = { walletName, walletAddress, amount: res.amount };
+                // 暂停1-3秒
+                break;
+            }
+            retry++;
+        }
+        if (retry === MAXRETRY) {
+            airDropData = { walletName, walletAddress, amount: 'error' };
+        }
+        logger.success(airDropData);
+        await appendToCsv(airDropData, outputPath)
+        await new Promise(resolve => setTimeout(resolve, randomInt(1000, 3000)));
+    }
+
+    
+    logger.info(`所有地址查询完毕，结果保存在: ${outputPath}`);
+
 })();

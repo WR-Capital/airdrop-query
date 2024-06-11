@@ -25,5 +25,8 @@ export const PROXY = {
 // ----------------空投查询配置----------------
 
 // --------Jupiter空投查询配置--------
-export const JUPWALLETPATH = ''; // Jup空投钱包路径
+export const JUPWALLETPATH = '/Users/lishuai/Documents/crypto/bockchainbot/SOLTestWalle加密.csv'; // Jup空投钱包路径
 export const JUPTOKENMINT = 'UPTx1d24aBWuRgwxVnFmX4gNraj3QGFzL3QqBgxtWQG'; // JUP要查询的token合约地址,在空投查询页面可以找到
+
+// --------ZKSYNC空投查询配置--------
+export const ZKWALLETPATH = '/Users/lishuai/Documents/crypto/bockchainbot/TestWalletData.csv'; // Jup空投钱包路径

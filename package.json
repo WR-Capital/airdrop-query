@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "jupiter": "node ./src/jupiter.js"
+    "jupiter": "node ./src/jupiter.js",
+    "zksync": "node ./src/zksync.js"
   },
   "keywords": [],
   "author": "",

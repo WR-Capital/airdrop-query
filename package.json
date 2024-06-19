@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "jupiter": "node ./src/jupiter.js",
-    "zksync": "node ./src/zksync.js"
+    "zksync": "node ./src/zksync.js",
+    "layerzero": "node ./src/layerzero.js"
   },
   "keywords": [],
   "author": "",

@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@solana/spl-token": "^0.4.7",
     "@youpaichris/logger": "^5.0.0",
     "axios-https-proxy-fix": "^0.17.1",
     "csv-parser": "^3.0.0",
